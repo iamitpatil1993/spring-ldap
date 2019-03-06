@@ -15,7 +15,7 @@ public class Launcher {
 	private static final Logger LOGER = LoggerFactory.getLogger(Launcher.class);
 
 	public static void main(String args[]) {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring/app-context.xml");
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:config/app-context.xml");
 
 		HelloWorldService service = applicationContext.getBean(HelloWorldService.class);
 		LOGER.info("Service returned :: {}", service.getMessage());
