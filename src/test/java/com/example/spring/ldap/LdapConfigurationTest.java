@@ -41,16 +41,14 @@ public class LdapConfigurationTest {
 
 	@Test
 	public void sampleQueryTest() {
-
 		// when
-		List<String> domainComponents = ldapTemplate.search(LdapQueryBuilder.query().where("objectclass").is("domain"),
+		List<String> domainComponents = ldapTemplate.search(LdapQueryBuilder.query().where("objectclass").is("top"),
 				new AttributesMapper<String>() {
 			@Override
 			public String mapFromAttributes(Attributes attributes) throws NamingException {
-				return attributes.get("dc").get().toString();
+				return attributes.get("objectclass").get().toString();
 			}
 		});
-
 		// then
 		assertNotNull(domainComponents);
 		assertTrue(domainComponents.size() > 0);

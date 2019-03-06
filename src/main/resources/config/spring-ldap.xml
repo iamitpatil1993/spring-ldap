@@ -12,8 +12,10 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
 
-	<ldap:context-source url="ldap://localhost:389" username="uid=admin,ou=system" password="secret"/>
-	
+	<ldap:context-source url="ldap://localhost:389"
+		username="cn=admin,dc=example,dc=com" password="asdf1234"
+		base="dc=example,dc=com" />
+
 	<ldap:ldap-template />
 
 </beans>
