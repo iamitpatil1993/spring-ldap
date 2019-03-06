@@ -11,10 +11,11 @@
 		http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap-2.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
+	<context:property-placeholder location="classpath:ldap-context-source-properties"/>
 
-	<ldap:context-source url="ldap://localhost:389"
-		username="cn=admin,dc=example,dc=com" password="asdf1234"
-		base="dc=example,dc=com" />
+	<ldap:context-source url="${ldap.url}"
+		username="${ldap.username}" password="${ldap.password}"
+		base="${ldap.base}" />
 
 	<ldap:ldap-template />
 
