@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.PseudoColumnUsage;
 import java.util.List;
 import java.util.Optional;
 
@@ -144,5 +145,26 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		// then
 		assertNotNull(personUsername);
 		assertEquals(person.getUsername(), personUsername);
+	}
+	
+	@Test
+	public void createTest() {
+		// given
+		Person person = new Person();
+		person.setUsername("john");
+		person.setLastName("Porter");
+		person.setPhone("23431234545");
+		
+		// when
+		String personDn = personRepo.create(person);
+		
+		// then
+		assertNotNull(personDn);
+		assertEquals("cn=john,ou=engineering,ou=praxify", personDn);
+		
+		Optional<Person> createdPerson = personRepo.finById(personDn);
+		
+		assertNotNull(createdPerson);
+		assertTrue(createdPerson.isPresent());
 	}
 }

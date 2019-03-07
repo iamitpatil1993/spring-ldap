@@ -18,4 +18,6 @@ public interface PersonRepo {
 	Optional<Person> finById(final String dn);
 	
 	Optional<Person> findByLastName(final String lastName);
+	
+	String create(Person person);
 }

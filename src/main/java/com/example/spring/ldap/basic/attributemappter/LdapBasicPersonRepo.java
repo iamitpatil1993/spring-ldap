@@ -10,10 +10,14 @@ import java.util.Optional;
 
 import javax.naming.Name;
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ldap.NameAlreadyBoundException;
 import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
@@ -151,5 +155,42 @@ public class LdapBasicPersonRepo implements PersonRepo {
 	 */
 	private String getUsernmeFromDn(final Name dn) {
 		return LdapUtils.getStringValue(dn, "cn");
+	}
+
+	/**
+	 * Creates person. ('Bind' in JNDI terms, which actually term used to refer Authentication in LDAP)
+	 * Uses bind operation
+	 */
+	@Override
+	public String create(Person person) {
+		Name dn = buildDn(person);
+		Attributes attributes = buildAttributes(person);
+
+		try {
+			ldapTemplate.bind(dn, null, attributes);
+		} catch (NameAlreadyBoundException e) {
+			LOGGER.info("Person already exists by dn :: {}", dn);
+		}
+		return dn.toString();
+	}
+
+	/**
+	 * Builds attributes from Person
+	 * @param person
+	 * @return
+	 */
+	private Attributes buildAttributes(Person person) {
+		Attributes attributes = new BasicAttributes();
+	
+		Attribute objectClass = new BasicAttribute("objectclass");
+		objectClass.add("organizationalPerson");
+		objectClass.add("top");
+		
+		attributes.put(objectClass);
+		attributes.put("cn", person.getUsername());
+		attributes.put("sn", person.getLastName());
+		attributes.put("telephoneNumber", person.getPhone());
+		
+		return attributes;
 	}
 }
