@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQueryBuilder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.GenericXmlContextLoader;
 
 /**
  * This test ensure ldap configuration is correct and connectivity to configured ldap server exists.
@@ -26,8 +24,7 @@ import org.springframework.test.context.support.GenericXmlContextLoader;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:config/spring-ldap.xml" }, loader = GenericXmlContextLoader.class)
-public class LdapConfigurationTest {
+public class LdapConfigurationTest extends BaseTest{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LdapConfigurationTest.class);
 

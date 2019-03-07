@@ -11,12 +11,18 @@
 		http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap-2.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-	<context:property-placeholder location="classpath:ldap-context-source-properties"/>
+	<context:property-placeholder
+		location="classpath:ldap-context-source-properties" />
 
 	<ldap:context-source url="${ldap.url}"
 		username="${ldap.username}" password="${ldap.password}"
 		base="${ldap.base}" />
 
+	<!-- This bean declaration will automatically register this bean to default 
+		bean name and will also resolve context-source by assuming default bean name 
+		for context-source. -->
+	<!-- If we give different bean name for context-source, then we will have 
+		to manually wire that bean by id here. -->
 	<ldap:ldap-template />
 
 </beans>
