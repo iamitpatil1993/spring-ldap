@@ -8,17 +8,16 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 import java.util.List;
 import java.util.Optional;
 
-import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
-import javax.naming.ldap.LdapName;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.ldap.query.LdapQuery;
+import org.springframework.ldap.query.SearchScope;
 import org.springframework.stereotype.Component;
 
 /**Bean shows use of 
@@ -98,8 +97,31 @@ public class LdapBasicPersonRepo implements PersonRepo {
 		@Override
 		public Person mapFromAttributes(Attributes attributes) throws NamingException {
 			Person person = new Person();
-			person.setLastName(attributes.get("sn") != null ? attributes.get("sn").toString() : null);
+			person.setLastName(attributes.get("sn") != null ? attributes.get("sn").get().toString() : null);
 			return person;
 		}
+	}
+
+	/**
+	 * Demonstrates advance search operation
+	 */
+	@Override
+	public Optional<Person> findByLastName(String lastName) {
+		if (lastName != null) {
+			LdapQuery query = query()
+					.base("ou=engineering,ou=praxify")
+					.attributes("sn", "cn")
+					.searchScope(SearchScope.ONELEVEL)
+					.countLimit(1)
+					.where("objectclass").is("organizationalPerson")
+					.and("sn").is(lastName);
+
+			// NOTE: In case of search, if no resoult found it do not throw excepion rather, only return empty list.
+			List<Person> persons = ldapTemplate.search(query, new PersonAttributeMapper());
+			if (persons != null && !persons.isEmpty()) {
+				return Optional.of(persons.get(0));
+			}
+		}
+		return Optional.empty();
 	}
 }

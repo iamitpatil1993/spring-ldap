@@ -16,4 +16,6 @@ public interface PersonRepo {
 	List<Person> getAllPersons();
 	
 	Optional<Person> finById(final String dn);
+	
+	Optional<Person> findByLastName(final String lastName);
 }

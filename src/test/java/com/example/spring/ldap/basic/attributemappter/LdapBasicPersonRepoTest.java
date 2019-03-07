@@ -1,11 +1,15 @@
 package com.example.spring.ldap.basic.attributemappter;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 import java.util.Optional;
 
+import org.hamcrest.core.IsNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +82,34 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		// when
 		Optional<Person> person = personRepo.finById(personDn);
 
+		// then
+		assertNotNull(person);
+		assertThat(person.isPresent(), is(false));
+	}
+	
+	@Test
+	public void findByLastNameWithFoundByNameTest() {
+		// given
+		String lastName = "patil";
+		
+		// when
+		Optional<Person> person = personRepo.findByLastName(lastName);
+		
+		// then
+		assertNotNull(person);
+		assertThat(person.isPresent(), is(true));
+		assertNotNull(person.get().getLastName());
+		assertTrue(person.get().getLastName().equalsIgnoreCase(lastName));
+	}
+	
+	@Test
+	public void findByLastNameWithNotFoundByNameTest() {
+		// given
+		String lastName = "asd";
+		
+		// when
+		Optional<Person> person = personRepo.findByLastName(lastName);
+		
 		// then
 		assertNotNull(person);
 		assertThat(person.isPresent(), is(false));
