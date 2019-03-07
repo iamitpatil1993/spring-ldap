@@ -20,4 +20,6 @@ public interface PersonRepo {
 	Optional<Person> findByLastName(final String lastName);
 	
 	String create(Person person);
+	
+	void removeById(final String dn);
 }

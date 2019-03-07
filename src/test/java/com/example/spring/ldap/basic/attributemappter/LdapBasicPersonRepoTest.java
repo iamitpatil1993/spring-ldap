@@ -6,14 +6,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.sql.PseudoColumnUsage;
 import java.util.List;
 import java.util.Optional;
 
 import javax.naming.Name;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.powermock.reflect.Whitebox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.InvalidNameException;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.example.spring.ldap.BaseTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LdapBasicPersonRepoTest extends BaseTest {
 
 	@Autowired
@@ -166,5 +168,19 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		
 		assertNotNull(createdPerson);
 		assertTrue(createdPerson.isPresent());
+	}
+	
+	@Test
+	public void removeByIdTest() {
+		// given
+		String personDn = "cn=john,ou=engineering,ou=praxify";
+		
+		// when
+		personRepo.removeById(personDn);
+		
+		// then
+		Optional<Person> person = personRepo.finById(personDn);
+		assertNotNull(person);
+		assertThat(person.isPresent(), is(false));
 	}
 }

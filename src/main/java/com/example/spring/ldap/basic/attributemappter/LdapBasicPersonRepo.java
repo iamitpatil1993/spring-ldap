@@ -193,4 +193,20 @@ public class LdapBasicPersonRepo implements PersonRepo {
 		
 		return attributes;
 	}
+
+	/**
+	 * Removes Person entry by dn
+	 * Uses JNDI unbind operation to remove entry.
+	 * 
+	 * unbind operation does not throw any error if entry does not exists by provided dn, it silently ignores.
+	 */
+	@Override
+	public void removeById(String dn) {
+		// NOTE: In order to successfully perform this operaton on entry with provided
+		// dn, entry MUST not have any childs.
+		// If entry have child, then use unbind(dn, boolean recusrsive) instead. Second boolean
+		// parameter used to decide whether to remove all child entries as well
+		// recursively. If we set it's value to recursive = false, and if entry has child entries then operation will fail.
+		ldapTemplate.unbind(dn);
+	}
 }
