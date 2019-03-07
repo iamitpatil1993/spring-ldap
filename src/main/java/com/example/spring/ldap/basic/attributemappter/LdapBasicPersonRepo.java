@@ -14,6 +14,8 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,5 +210,19 @@ public class LdapBasicPersonRepo implements PersonRepo {
 		// parameter used to decide whether to remove all child entries as well
 		// recursively. If we set it's value to recursive = false, and if entry has child entries then operation will fail.
 		ldapTemplate.unbind(dn);
+	}
+
+	/**
+	 * Demonstrates update attribute operation.
+	 * it demonstrates REPLACE attribute update operation. Which replace existing value with new one.
+	 */
+	@Override
+	public void setLastName(Person person) {
+		final Name dn = buildDn(person);
+		
+		Attribute lastNameAttribute = new BasicAttribute("sn", person.getLastName());
+		ModificationItem modificationItem = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, lastNameAttribute);
+		
+		ldapTemplate.modifyAttributes(dn, new ModificationItem[]{modificationItem});
 	}
 }

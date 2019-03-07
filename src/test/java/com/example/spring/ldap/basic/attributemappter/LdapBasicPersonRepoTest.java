@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import javax.naming.Name;
 
+import org.hamcrest.core.IsEqual;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -182,5 +183,28 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		Optional<Person> person = personRepo.finById(personDn);
 		assertNotNull(person);
 		assertThat(person.isPresent(), is(false));
+	}
+	
+	@Test
+	public void setLastNameTest() throws Exception {
+		// given
+		String updatedLastName = "asdf";
+		Person person = new Person();
+		person.setUsername("amipatil");
+		person.setLastName(updatedLastName);
+	
+		// when
+		personRepo.setLastName(person);
+		
+		// then
+		Name name = Whitebox.invokeMethod(personRepo, "buildDn", person);
+		Optional<Person> updatePerson = personRepo.finById(name.toString());
+		
+		assertThat(updatePerson.isPresent(), is(true));
+		assertEquals(updatePerson.get().getLastName(), updatedLastName);
+		
+		// update for data consistency
+		person.setLastName("Patil");
+		personRepo.setLastName(person);
 	}
 }

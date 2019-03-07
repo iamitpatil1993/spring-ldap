@@ -22,4 +22,6 @@ public interface PersonRepo {
 	String create(Person person);
 	
 	void removeById(final String dn);
+	
+	void setLastName(Person person);
 }
