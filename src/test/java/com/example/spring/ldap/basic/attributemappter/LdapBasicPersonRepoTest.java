@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.naming.Name;
 
@@ -206,5 +207,24 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		// update for data consistency
 		person.setLastName("Patil");
 		personRepo.setLastName(person);
+	}
+
+	@Test
+	public void addPostalCodeTest() throws Exception {
+		// given
+		String postalCode = UUID.randomUUID().toString();
+		Person person = new Person();
+		person.setUsername("amipatil");
+		person.addPostalCodes(postalCode);
+
+		personRepo.addPostalCode(person);
+
+		// then
+		Name name = Whitebox.invokeMethod(personRepo, "buildDn", person);
+		Optional<Person> updatePerson = personRepo.finById(name.toString());
+		
+		assertThat(updatePerson.isPresent(), is(true));
+		assertTrue(updatePerson.get().getPostalCodes() != null);
+		assertTrue(updatePerson.get().getPostalCodes().size() > 0);
 	}
 }

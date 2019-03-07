@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.naming.Name;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -107,6 +108,15 @@ public class LdapBasicPersonRepo implements PersonRepo {
 		public Person mapFromAttributes(Attributes attributes) throws NamingException {
 			Person person = new Person();
 			person.setLastName(attributes.get("sn") != null ? attributes.get("sn").get().toString() : null);
+
+			// This is how we need to handle multi-value attributes
+			Attribute postalCodes = attributes.get("postalCode");
+			if (postalCodes != null) {
+				NamingEnumeration<String> postalCodeEnumeration =  (NamingEnumeration<String>) postalCodes.getAll();
+				while (postalCodeEnumeration.hasMoreElements()) {
+					person.addPostalCodes(postalCodeEnumeration.next());
+				}
+			}
 			return person;
 		}
 	}
@@ -224,5 +234,21 @@ public class LdapBasicPersonRepo implements PersonRepo {
 		ModificationItem modificationItem = new ModificationItem(DirContext.REPLACE_ATTRIBUTE, lastNameAttribute);
 		
 		ldapTemplate.modifyAttributes(dn, new ModificationItem[]{modificationItem});
+	}
+
+	/**
+	 *  Demonstrates update attribute operation.
+	 *  SUpports setting multiple values for same attribute.
+	 *  It demonstrates ADD attribute update operation.
+	 */
+	@Override
+	public void addPostalCode(Person person) {
+		Name dn = buildDn(person);
+		
+		Attribute postalCodeMultiValueAttribute = new BasicAttribute("postalCode");
+		person.getPostalCodes().stream().forEach(postalCodeMultiValueAttribute::add);
+		ModificationItem modificationItem = new ModificationItem(DirContext.ADD_ATTRIBUTE, postalCodeMultiValueAttribute);
+		
+		ldapTemplate.modifyAttributes(dn, new ModificationItem[] {modificationItem});
 	}
 }

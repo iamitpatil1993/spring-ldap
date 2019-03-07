@@ -24,4 +24,6 @@ public interface PersonRepo {
 	void removeById(final String dn);
 	
 	void setLastName(Person person);
+	
+	void addPostalCode(Person person);
 }
