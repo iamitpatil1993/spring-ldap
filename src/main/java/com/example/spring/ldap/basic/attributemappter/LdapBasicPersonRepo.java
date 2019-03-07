@@ -8,6 +8,7 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 import java.util.List;
 import java.util.Optional;
 
+import javax.naming.Name;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
@@ -18,6 +19,8 @@ import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.SearchScope;
+import org.springframework.ldap.support.LdapNameBuilder;
+import org.springframework.ldap.support.LdapUtils;
 import org.springframework.stereotype.Component;
 
 /**Bean shows use of 
@@ -123,5 +126,30 @@ public class LdapBasicPersonRepo implements PersonRepo {
 			}
 		}
 		return Optional.empty();
+	}
+	
+	/**
+	 * Builds dn for person.
+	 * Currently hard coded, RDNs for demo.
+	 * @param person
+	 * @return dn of person
+	 */
+	private Name buildDn(Person person) {
+		// creates dn relative to base configured in context-source. Uses newInstance() instead of newInstance(String base)
+		// add RDNs in reverse order, i.e from RootDSE to entry.
+		return LdapNameBuilder.newInstance()
+				.add("ou", "praxify")
+				.add("ou", "engineering")
+				.add("cn", person.getUsername())
+				.build();
+	}
+	
+	/**
+	 * Using ldapUtils methods we can parse and get RDNs from DN
+	 * @param dn
+	 * @return
+	 */
+	private String getUsernmeFromDn(final Name dn) {
+		return LdapUtils.getStringValue(dn, "cn");
 	}
 }

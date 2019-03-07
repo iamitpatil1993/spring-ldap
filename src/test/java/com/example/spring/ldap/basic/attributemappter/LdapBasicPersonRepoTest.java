@@ -1,7 +1,7 @@
 package com.example.spring.ldap.basic.attributemappter;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -9,9 +9,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.hamcrest.core.IsNull;
+import javax.naming.Name;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.reflect.Whitebox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.InvalidNameException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -113,5 +115,34 @@ public class LdapBasicPersonRepoTest extends BaseTest {
 		// then
 		assertNotNull(person);
 		assertThat(person.isPresent(), is(false));
+	}
+	
+	@Test
+	public void buildDnTest() throws Exception {
+		// given
+		Person person = new Person();
+		person.setUsername("amipatil");
+		
+		// when
+		Name name = Whitebox.invokeMethod(personRepo, "buildDn", person);
+		
+		// then
+		assertNotNull(name);
+		assertEquals("cn=amipatil,ou=engineering,ou=praxify", name.toString());
+	}
+	
+	@Test
+	public void getUsernmeFromDnTest() throws Exception {
+		// given
+		Person person = new Person();
+		person.setUsername("amipatil");
+		Name name = Whitebox.invokeMethod(personRepo, "buildDn", person);
+		
+		// when
+		String personUsername = Whitebox.invokeMethod(personRepo, "getUsernmeFromDn", name);
+		
+		// then
+		assertNotNull(personUsername);
+		assertEquals(person.getUsername(), personUsername);
 	}
 }
