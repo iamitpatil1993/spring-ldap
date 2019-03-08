@@ -20,6 +20,7 @@ import javax.naming.directory.ModificationItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ldap.NameAlreadyBoundException;
 import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.core.AttributesMapper;
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@Qualifier("basic")
 public class LdapBasicPersonRepo implements PersonRepo {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LdapBasicPersonRepo.class);
