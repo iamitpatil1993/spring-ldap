@@ -50,3 +50,14 @@ telephoneNumber: +918983099124
 userPassword: {CRYPT}JDJhJDEyJC5zU294WlJ3SHZ0WTNtS1FpamFqSi4uQWFHeVZFLjR3QWk
  1WDgxMU94bEJ0RHVkVkVST0Jp
 
+
+dn: ou=groups,dc=example,dc=com
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+dn: cn=user,ou=groups,dc=example,dc=com
+objectclass: groupOfUniqueNames
+objectclass: top
+cn: user
+uniqueMember:  

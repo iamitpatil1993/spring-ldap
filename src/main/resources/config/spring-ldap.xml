@@ -24,5 +24,9 @@
 	<!-- If we give different bean name for context-source, then we will have 
 		to manually wire that bean by id here. -->
 	<ldap:ldap-template />
+	
+	<!-- We need to declare this bean in order to use LdapBaseNameAware interface to work and inject base name of dit into spring beans. -->
+	<!-- otherwisebase name will not get injected into beans implementing LdapBaseNameAware interface. -->
+	<bean class="org.springframework.ldap.core.support.BaseLdapPathBeanPostProcessor" />
 
 </beans>

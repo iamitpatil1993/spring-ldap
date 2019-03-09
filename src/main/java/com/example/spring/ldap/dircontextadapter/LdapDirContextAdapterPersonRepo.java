@@ -102,7 +102,7 @@ public class LdapDirContextAdapterPersonRepo implements PersonRepo {
 		adapter.setAttributeValue("cn", person.getUsername());
 		adapter.setAttributeValue("sn", person.getLastName());
 		adapter.setAttributeValue("telephoneNumber", person.getPhone());
-
+		
 		try {
 			ldapTemplate.bind(adapter);
 		} catch (NameAlreadyBoundException e) {
