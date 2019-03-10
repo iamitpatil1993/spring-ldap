@@ -45,7 +45,6 @@ objectClass: top
 objectClass: organizationalPerson
 cn: amipatil
 sn: Patil
-telephoneNumber: +918983099123
 telephoneNumber: +918983099124
 userPassword: {CRYPT}JDJhJDEyJC5zU294WlJ3SHZ0WTNtS1FpamFqSi4uQWFHeVZFLjR3QWk
  1WDgxMU94bEJ0RHVkVkVST0Jp
