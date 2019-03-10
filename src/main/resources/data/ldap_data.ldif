@@ -1,62 +1,54 @@
 version: 1
 
-dn: dc=example,dc=com
-objectClass: organization
-objectClass: dcObject
-objectClass: top
-dc: example
-o: amipatil
-
-dn: cn=admin,dc=example,dc=com
+dn: cn=admin,dc=openmicroscopy,dc=org
 objectClass: organizationalRole
 objectClass: simpleSecurityObject
 cn: admin
 userPassword: {SSHA}tZDBOusDm5lPsk+HqDdtu/w1M4+X/HBA
 description: LDAP administrator
 
-dn: ou=bitwise,dc=example,dc=com
+dn: ou=bitwise,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalUnit
 ou: bitwise
 
-dn: ou=praxify,dc=example,dc=com
+dn: ou=praxify,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalUnit
 ou: praxify
 
-dn: ou=finance,ou=praxify,dc=example,dc=com
+dn: ou=finance,ou=praxify,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalUnit
 ou: finance
 
-dn: ou=engineering,ou=praxify,dc=example,dc=com
+dn: ou=engineering,ou=praxify,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalUnit
 ou: engineering
 
-dn: cn=ramesh,ou=finance,ou=praxify,dc=example,dc=com
+dn: cn=ramesh,ou=finance,ou=praxify,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalPerson
 cn: ramesh
 sn: Patil
 
-dn: cn=amipatil,ou=engineering,ou=praxify,dc=example,dc=com
+dn: cn=amipatil,ou=engineering,ou=praxify,dc=openmicroscopy,dc=org
 objectClass: top
 objectClass: organizationalPerson
 cn: amipatil
 sn: Patil
 telephoneNumber: +918983099124
-userPassword: {CRYPT}JDJhJDEyJC5zU294WlJ3SHZ0WTNtS1FpamFqSi4uQWFHeVZFLjR3QWk
- 1WDgxMU94bEJ0RHVkVkVST0Jp
+userPassword: {SHA}9Yz15+EPGV4htVMJbQksdj7Riw4=
 
 
-dn: ou=groups,dc=example,dc=com
+dn: ou=groups,dc=openmicroscopy,dc=org
 objectclass: organizationalUnit
 objectclass: top
 ou: groups
 
-dn: cn=user,ou=groups,dc=example,dc=com
+dn: cn=user,ou=groups,dc=openmicroscopy,dc=org
 objectclass: groupOfUniqueNames
 objectclass: top
 cn: user
-uniqueMember:  
+uniqueMember: cn=ramesh,ou=finance,ou=praxify,dc=openmicroscopy,dc=org 

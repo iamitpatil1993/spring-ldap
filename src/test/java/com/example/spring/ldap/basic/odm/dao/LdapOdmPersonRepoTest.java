@@ -3,15 +3,20 @@
  */
 package com.example.spring.ldap.basic.odm.dao;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,8 +30,10 @@ import com.example.spring.ldap.basic.attributemappter.PersonRepo;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LdapOdmPersonRepoTest extends AbstractPersonRepoTest {
 
+	private static String username;
 	@Autowired
 	@Qualifier("odm")
 	private PersonRepo personRepo;
@@ -44,7 +51,7 @@ public class LdapOdmPersonRepoTest extends AbstractPersonRepoTest {
 	@Override
 	public void createTest() {
 		// given
-		String username = UUID.randomUUID().toString().concat("-odm");
+		username = UUID.randomUUID().toString().concat("-odm");
 		Person person = new Person();
 		person.setUsername(username);
 		person.setLastName("Porter");
@@ -64,5 +71,20 @@ public class LdapOdmPersonRepoTest extends AbstractPersonRepoTest {
 	@Override
 	public void getUsernmeFromDnTest() {
 		// Nothing to do here
+	}
+	
+	@Test
+	@Override
+	public void removeByIdTest() {
+		// given
+		String personDn =  new StringBuilder("cn=").append(username).append(",ou=engineering,ou=praxify").toString();
+
+		// when
+		personRepo.removeById(personDn);
+
+		// then
+		Optional<Person> person = personRepo.finById(personDn);
+		assertNotNull(person);
+		assertThat(person.isPresent(), is(false));
 	}
 }

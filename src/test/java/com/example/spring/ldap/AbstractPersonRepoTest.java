@@ -83,7 +83,6 @@ public abstract class AbstractPersonRepoTest extends BaseTest {
 		assertThat(person.isPresent(), is(false));
 	}
 
-	@Test(expected = InvalidNameException.class)
 	public void finByIdWithInvalidDnTest() {
 
 		final String personDn = "casdn=sam,ou=engineering,ou=praxify";
